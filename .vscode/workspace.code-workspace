@@ -1,0 +1,32 @@
+{
+	"folders": [
+        {
+            "name": "Root",
+			"path": ".."
+		},
+        {
+            "name": "Core",
+			"path": "../core"
+		},
+		{
+            "name": "Client",
+			"path": "../client"
+		},
+        {
+            "name": "BackendLibraries",
+            "path": "../backend/libs"
+        },
+        {
+            "name": "BackendApps",
+			"path": "../backend/apps"
+		}
+    ],
+    "settings": {
+    },
+    "extensions": {
+        "recommendations": [
+            "dbaeumer.vscode-eslint",
+            "ms-vscode.vscode-node-azure-pack"
+        ]
+    }
+}
