@@ -9,7 +9,7 @@ export class GatewayController {
     @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
   ) {}
 
-  @Get()
+  @Get('/users')
   async getHello(): Promise<{ username: string; password: string }> {
     const userResponse: { username: string; password: string } =
       await firstValueFrom(

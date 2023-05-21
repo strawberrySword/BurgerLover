@@ -18,7 +18,7 @@
         },
         {
             "name": "BackendApps",
-			"path": "../backend/apps"
+			"path": "../server"
 		}
     ],
     "settings": {

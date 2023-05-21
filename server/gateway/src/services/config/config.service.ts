@@ -13,6 +13,13 @@ export class ConfigService {
         host: process.env.USER_SERVICE_HOST || 'localhost',
       },
     };
+    this.envConfig.placesService = {
+      transport: Transport.TCP,
+      options: {
+        port: process.env.PLACES_SERVICE_PORT || 3002,
+        host: process.env.PLACES_SERVICE_HOST || 'localhost',
+      },
+    };
   }
   get(key: string): any {
     return this.envConfig[key];
