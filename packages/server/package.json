@@ -1,0 +1,15 @@
+{
+  "name": "burgerlover-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:gateway": "cd .\\gateway && npm run start:dev",
+    "start:user": "cd .\\user && npm run start:dev",
+    "start:token": "cd .\\token && npm run start:dev",
+    "start:places": "cd .\\places && npm run start:dev"
+  },
+  "author": "",
+  "license": "ISC"
+}

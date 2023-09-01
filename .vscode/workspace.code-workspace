@@ -1,32 +1,31 @@
 {
 	"folders": [
-        {
-            "name": "Root",
+		{
+			"name": "Root",
 			"path": ".."
 		},
-        {
-            "name": "Core",
-			"path": "../core"
+		{
+			"name": "Core",
+			"path": "../packages/core"
 		},
 		{
-            "name": "Client",
-			"path": "../client"
+			"name": "Client",
+			"path": "../packages/client"
 		},
-        {
-            "name": "BackendLibraries",
-            "path": "../backend/libs"
-        },
-        {
-            "name": "BackendApps",
-			"path": "../server"
+		{
+			"name": "BackendLibraries",
+			"path": "../packages/server/libs"
+		},
+		{
+			"name": "BackendApps",
+			"path": "../packages/server"
 		}
-    ],
-    "settings": {
-    },
-    "extensions": {
-        "recommendations": [
-            "dbaeumer.vscode-eslint",
-            "ms-vscode.vscode-node-azure-pack"
-        ]
-    }
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"ms-vscode.vscode-node-azure-pack"
+		]
+	}
 }
