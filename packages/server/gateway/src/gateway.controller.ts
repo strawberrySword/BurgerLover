@@ -7,15 +7,15 @@ import {
   Param,
   HttpException,
   Res,
-  Req,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { TokenInfoDto, UserInfoDto } from './dto/user.dto';
 import { LocationDto } from './dto/location.dto';
-import { Response, Request } from 'express';
-import { request } from 'http';
+import { Response } from 'express';
+import { CreateUserRequestDto, CreateUserResponseDto } from '@burgerlover/core';
 
 @Controller()
 export class GatewayController {
@@ -25,38 +25,41 @@ export class GatewayController {
     @Inject('TOKEN_SERVICE') private readonly tokenServiceClient: ClientProxy,
   ) {}
 
-  @Get('/users')
-  async getHello(): Promise<{ username: string; password: string }> {
-    const userResponse: { username: string; password: string } =
-      await firstValueFrom(this.userServiceClient.send('getHello', {}));
-    return userResponse;
-  }
-
   @Post('/user')
   async createUser(
-    @Body() user: UserInfoDto,
-  ): Promise<{ username: string; password: string }> {
-    const userDetails = await firstValueFrom(
+    @Body() user: CreateUserRequestDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<CreateUserResponseDto> {
+    const userDetails = (await firstValueFrom(
       this.userServiceClient.send('user-created', user),
-    );
-    if (userDetails.status !== 201 && userDetails.status !== 200) {
+    )) as CreateUserResponseDto;
+    if (userDetails.code !== 201) {
       throw new HttpException(userDetails, userDetails.status);
     }
 
     const token = await firstValueFrom(
       this.tokenServiceClient.send('generate-token', {
-        userName: userDetails.user.userName,
-        userId: userDetails.user.id,
+        userName: userDetails.userName,
+        userId: userDetails.id,
       }),
     );
 
-    return { ...userDetails, access_token: token.access_token };
+    if (token.status !== 201) {
+      return new HttpException(token, token.status);
+    }
+    const tokenExpiresDate = new Date();
+    tokenExpiresDate.setDate(tokenExpiresDate.getDate() + 30);
+    response.cookie('access_token', token.access_token, {
+      secure: true,
+      maxAge: 300000,
+    });
+
+    return userDetails;
   }
 
   @Post('/login')
   async login(
     @Body() user: UserInfoDto,
-    @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
     const userDetails = await firstValueFrom(
@@ -65,7 +68,7 @@ export class GatewayController {
     if (!userDetails || userDetails.status !== 200) {
       throw new HttpException(userDetails, userDetails.status);
     }
-    console.log(request.cookies);
+
     const token = await firstValueFrom(
       this.tokenServiceClient.send('generate-token', {
         userName: userDetails.user.userName,

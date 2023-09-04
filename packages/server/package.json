@@ -11,5 +11,8 @@
     "start:places": "cd .\\places && npm run start:dev"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@burgerlover/core": "^1.0.0"
+  }
 }
