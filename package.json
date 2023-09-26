@@ -6,6 +6,6 @@
     "work": "lerna run --parallel dev"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^7.3.0"
   }
 }

@@ -1,6 +1,5 @@
 import { HttpStatus } from "@nestjs/common";
-export interface BaseResponse {
+export declare class BaseResponse {
     message: string;
     status: HttpStatus;
 }
-//# sourceMappingURL=base.d.ts.map

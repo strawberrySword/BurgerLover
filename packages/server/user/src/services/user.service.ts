@@ -7,6 +7,11 @@ import { Repository } from 'typeorm';
 import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcrypt';
 import { log } from 'console';
+import {
+  SignUpRequestDto,
+  CreateUserResponseDto,
+  BaseResponse,
+} from '@burgerlover/core';
 
 @Injectable()
 export class UserService {
@@ -23,7 +28,9 @@ export class UserService {
     );
   }
 
-  async createUser(user: UserInfoDto): Promise<any> {
+  async createUser(
+    user: SignUpRequestDto,
+  ): Promise<CreateUserResponseDto | BaseResponse> {
     const userToCreate = new User();
     userToCreate.userName = user.userName;
     userToCreate.password = await bcrypt.hash(user.password, this.saltRounds);
@@ -35,7 +42,7 @@ export class UserService {
       return {
         status: HttpStatus.CREATED,
         message: 'user_created_succesfully',
-        user: response,
+        ...response,
       };
     } catch (error) {
       switch (error.code) {

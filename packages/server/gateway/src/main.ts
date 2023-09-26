@@ -5,10 +5,7 @@ import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
-  app.enableCors({
-    credentials: true,
-    origin: 'http://127.0.0.1:5173',
-  });
+  app.enableCors({});
   app.use(cookieParser());
   const options = new DocumentBuilder()
     .setTitle('Burger App')

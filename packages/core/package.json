@@ -11,6 +11,8 @@
   "author": "strawberrySword <shaharglame@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@nestjs/swagger": "^7.1.11",
+    "class-validator": "^0.14.0",
     "typescript": "^5.2.2"
   },
   "homepage": "https://github.com/strawberrySword/BurgerLover#readme",
@@ -19,8 +21,12 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "dist"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./types": "./dist/types/index.js"
+  },
   "publishConfig": {
     "access": "public"
   },

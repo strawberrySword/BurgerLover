@@ -15,7 +15,12 @@ import { ClientProxy } from '@nestjs/microservices';
 import { TokenInfoDto, UserInfoDto } from './dto/user.dto';
 import { LocationDto } from './dto/location.dto';
 import { Response } from 'express';
-import { CreateUserRequestDto, CreateUserResponseDto } from '@burgerlover/core';
+import {
+  BaseResponse,
+  SignUpRequestDto,
+  CreateUserResponseDto,
+  SearchUserResponseDto,
+} from '@burgerlover/core';
 
 @Controller()
 export class GatewayController {
@@ -27,15 +32,17 @@ export class GatewayController {
 
   @Post('/user')
   async createUser(
-    @Body() user: CreateUserRequestDto,
+    @Body() user: SignUpRequestDto,
     @Res({ passthrough: true }) response: Response,
-  ): Promise<CreateUserResponseDto> {
-    const userDetails = (await firstValueFrom(
+  ): Promise<CreateUserResponseDto | HttpException> {
+    const userDetails: CreateUserResponseDto = await firstValueFrom(
       this.userServiceClient.send('user-created', user),
-    )) as CreateUserResponseDto;
-    if (userDetails.code !== 201) {
+    );
+    if (userDetails.status !== HttpStatus.CREATED) {
+      console.log('gatcha', userDetails.status);
       throw new HttpException(userDetails, userDetails.status);
     }
+    console.log('hu?');
 
     const token = await firstValueFrom(
       this.tokenServiceClient.send('generate-token', {
@@ -44,8 +51,8 @@ export class GatewayController {
       }),
     );
 
-    if (token.status !== 201) {
-      return new HttpException(token, token.status);
+    if (token.status !== HttpStatus.CREATED) {
+      throw new HttpException(token, token.status);
     }
     const tokenExpiresDate = new Date();
     tokenExpiresDate.setDate(tokenExpiresDate.getDate() + 30);
@@ -61,22 +68,23 @@ export class GatewayController {
   async login(
     @Body() user: UserInfoDto,
     @Res({ passthrough: true }) response: Response,
-  ): Promise<void> {
-    const userDetails = await firstValueFrom(
+  ): Promise<SearchUserResponseDto | HttpException> {
+    const userDetails: SearchUserResponseDto = await firstValueFrom(
       this.userServiceClient.send('search-user-credentials', user),
     );
-    if (!userDetails || userDetails.status !== 200) {
+
+    if (userDetails.status !== HttpStatus.OK) {
       throw new HttpException(userDetails, userDetails.status);
     }
 
     const token = await firstValueFrom(
       this.tokenServiceClient.send('generate-token', {
-        userName: userDetails.user.userName,
-        userId: userDetails.user.id,
+        userName: userDetails.userName,
+        userId: userDetails.id,
       }),
     );
 
-    if (token.status !== 201) {
+    if (token.status !== HttpStatus.CREATED) {
       throw new HttpException(token, token.status);
     }
     const tokenExpiresDate = new Date();
@@ -85,7 +93,8 @@ export class GatewayController {
       secure: true,
       maxAge: 300000,
     });
-    return { ...userDetails };
+
+    return userDetails;
   }
 
   @Get('/hello/:address')

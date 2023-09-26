@@ -15,6 +15,11 @@ const router = createBrowserRouter([
         errorElement: <>woopty</>,
     },
     {
+        path: "/signup",
+        element: <SignUp />,
+        errorElement: <>woopty</>,
+    },
+    {
         path: "/login",
         element: <Login />,
         errorElement: <>woopty</>,

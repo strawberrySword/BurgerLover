@@ -9,11 +9,6 @@ export class UserInfoDto {
   @ApiProperty()
   @IsString()
   password: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsOptional()
-  avatar: string;
 }
 
 export class TokenInfoDto {

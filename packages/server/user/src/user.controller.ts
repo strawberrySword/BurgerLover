@@ -2,6 +2,12 @@ import { Controller } from '@nestjs/common';
 import { UserService } from './services/user.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { UserInfoDto } from './dto/user.dto';
+import {
+  BaseResponse,
+  SignUpRequestDto,
+  CreateUserResponseDto,
+  SearchUserResponseDto,
+} from '@burgerlover/core';
 
 //TODO add types
 @Controller()
@@ -14,7 +20,9 @@ export class UserController {
   }
 
   @MessagePattern('user-created')
-  createUser(user: UserInfoDto): any {
+  createUser(
+    user: SignUpRequestDto,
+  ): Promise<CreateUserResponseDto | BaseResponse> {
     return this.userService.createUser(user);
   }
 
@@ -24,7 +32,7 @@ export class UserController {
   }
 
   @MessagePattern('search-user-id')
-  getUserById(id): any {
+  getUserById(): any {
     //return this.userService.getUserById(id)
   }
 

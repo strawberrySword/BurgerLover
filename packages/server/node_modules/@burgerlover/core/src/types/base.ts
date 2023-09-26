@@ -1,5 +1,6 @@
 import { HttpStatus } from "@nestjs/common";
-export interface BaseResponse {
+
+export class BaseResponse {
 	message: string;
 	status: HttpStatus;
 }

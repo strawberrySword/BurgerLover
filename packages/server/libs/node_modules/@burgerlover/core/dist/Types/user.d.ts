@@ -1,12 +1,17 @@
+import { HttpStatus } from "@nestjs/common";
 import { BaseResponse } from "./base";
-export interface UserInfoDto {
+export declare class UserInfoDto {
     userName: string;
     avatar: string;
-    id: number;
 }
-export interface CreateUserRequestDto extends Omit<UserInfoDto, "id"> {
+export declare class SignUpRequestDto extends UserInfoDto {
     password: string;
 }
 export interface CreateUserResponseDto extends BaseResponse, UserInfoDto {
+    id: string;
+    status: HttpStatus.CREATED;
 }
-//# sourceMappingURL=user.d.ts.map
+export interface SearchUserResponseDto extends BaseResponse, UserInfoDto {
+    id: string;
+    status: HttpStatus.OK;
+}

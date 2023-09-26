@@ -1,14 +1,4 @@
-import {
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  IsBoolean,
-  IsNumber,
-  IsEmail,
-  ValidateNested,
-  Length,
-  IsArray,
-} from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
 export class LocationDto {
   @IsString()
